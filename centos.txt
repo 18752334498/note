@@ -1,0 +1,127 @@
+﻿配置阿里云Docker镜像加速仓库
+	https://cr.console.aliyun.com
+
+1.使用root权限登录Centos,确保 yum 包更新到最新:
+	sudo yum update
+2.卸载旧版本:
+	sudo yum remove docker  docker-common docker-selinux docker-engine
+3.安装需要的软件包:
+	sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+4.设置yum源:
+	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+5.配置镜像加速器:
+	sudo mkdir -p /etc/docker
+	sudo tee /etc/docker/daemon.json <<-'EOF'
+	{
+  		"registry-mirrors": ["https://1ingv6np.mirror.aliyuncs.com"]
+	}
+	EOF
+	sudo systemctl daemon-reload
+6.安装docker (此处我们安装社区版 docker-ce):
+	yum install docker-ce (这样写默认安装最新版本)
+
+docker version
+systemctl start docker
+systemctl enable docker   开机启动
+
+docker pull rabbitmq:management
+docker run -d -p 5672:5672 -p 15672:15672 --name rabbitmq rabbitmq:management
+==========================================================================================================
+2019-01-17 安装虚拟机成功：
+	vi /etc/sysconfig/network-scripts/ifcfg-enxxxx
+	BOOTPROTO=static
+	IPADDR0=192.168.42.128	//此IP要在一定范围内	编辑--虚拟网络编辑器--dpcp设置--其实IP和结束IP之间
+	GATEWAY0=192.168.42.2	//第四位自定义
+	DNS1=8.8.8.8
+	DNS2=114.114.114.114
+	windows--网络--属性--更改适配器设置--vmnet8--属性--ipv4--默认网关和GATEWAY0一致
+
+可在Xshell中连接
+xhell--文件传输--传输文件会报错--因为对应的文件夹权限不够--chmod -R 777 filename
+
+netstat -a 查看全部以开放端口
+虚拟机启动tomcat确无法访问:要关闭防火墙
+	启动： systemctl start firewalld
+	关闭： systemctl stop firewalld
+	查看状态： systemctl status firewalld 
+	开机禁用  ： systemctl disable firewalld
+	开机启用  ： systemctl enable firewalld
+
+==========================================================================================================
+docker load --input cent6base.tar
+windows挂在只认共享文件夹，默认是/c/users
+docker run -d -p 20022:22 -v /c/Users/Linux --name centos6 cent6:base
+
+xshell5连接 192.168.99.100：20022 用户名密码：root / root
+
+安装wget工具
+yum search wget
+yum install wget.x86_64
+
+安装ifconfig工具
+yum search ifconfig
+yum install net-tools.x86_64
+
+jdk下载：
+wget https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-linux-x64.tar.gz?AuthParam=1543396684_ad4bb2f4838abbb82af2fa835cd2f3c8
+vi /etc/profile
+export JAVA_HOME=/home/java/jdk1.8.0_191
+export CLASSPATH=.:JAVA_HOME/bin/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+
+tomcat下载
+wget https://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz
+
+apr下载
+wget http://archive.apache.org/dist/apr/apr-1.6.5.tar.gz
+tar -zxvf apr-1.6.5.tar.gz
+cd apr-1.6.5
+./configure --prefix=/usr/local/apr
+make && make install
+
+apr-util下载
+http://archive.apache.org/dist/apr/apr-util-1.6.1.tar.gz
+tar -zxvf apr-util-1.6.1.tar.gz
+cd apr-util-1.6.1
+./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr
+make && make install(报错：xml/apr_xml.c:35:19: fatal error: expat.h: No such file or directory)
+安装一下expat库即可
+yum install expat-devel
+make && make install
+
+tomcat-native下载
+tomcat解压之后其bin目录下包含tomcat-native的安装包
+./configure --with-apr=/usr/local/apr --with-java-home=/home/java/jdk1.8.0_191(失败了是因为openssl版本太低)
+./configure --with-apr=/usr/local/apr --with-java-home=/home/java/jdk1.8.0_191 --with-ssl=/usr/bin(这个还没试过)
+make && make install
+
+zlib安装
+yum install -y zlib zlib-devel
+
+openssl下载
+openssl version
+https://www.openssl.org/source/openssl-1.1.1a.tar.gz
+./config --prefix=/usr/local/openssl
+make && make install
+mv /usr/bin/openssl /usr/bin/openssl.bak
+mv /usr/include/openssl /usr/include/openssl.bak
+ln -s /usr/local/ssl/bin/openssl /usr/bin/openssl
+ln -s /usr/local/ssl/include/openssl /usr/include/openssl
+echo “/usr/local/ssl/lib” >> /etc/ld.so.conf
+ldconfig -v
+openssl version
+
+将默认的protocol="HTTP/1.1"修改为protocol="org.apache.coyote.http11.Http11AprProtocol"
+JAVA_OPTS="$JAVA_OPTS -Djava.library.path=/usr/local/apr/lib"
+或者
+vi /etc/profile
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/apr/lib
+export LD_RUN_PATH=$LD_RUN_PATH:/usr/local/apr/lib
+
+如果失败
+下载与你Tomcat对应版本的 tcnative-1.dll，放到apache-tomcat-N(版本号)\bin 目录下面，重启tomcat 
+
+
+==========================================================================================================
+docker pull zookeeper
+docker run --privileged=true -d --name zookeeper --publish 2181:2181  -d zookeeper:latest

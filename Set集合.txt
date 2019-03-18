@@ -1,0 +1,11 @@
+Set集合不能包含重复的元素的集合	public interface Set<E> extends Collection<E> {
+
+SortedSet接口继承自Set，他根据对象的比较顺序（可以是自然顺序，也可以是自定义的顺序），而不是插入顺序进行排序；
+TreeSet是SortedSet的唯一实现类，红黑树实现，树形结构，它的本质可以理解为是有序，无重复的元素的集合。
+TreeSet 是二差树实现的,Treeset中的数据是自动排好序的，不允许放入null值。
+
+HashSet，看他的源码可以知道，他的底层，是hashmap
+    public HashSet() {
+        map = new HashMap<>();
+    }
+HashSet 是哈希表实现的,HashSet中的数据是无序的，可以放入null，但只能放入一个null，两者中的值都不能重复，就如数据库中唯一约束。

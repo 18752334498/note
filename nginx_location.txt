@@ -1,0 +1,12 @@
+nginx配置location匹配模式及顺序
+　　location = /uri 　　　=开头表示精确匹配，只有完全匹配上才能生效。
+
+　　location ^~ /uri 　　 ^~ 开头对URL路径进行前缀匹配，并且在正则之前，多个符合则选择最长的结果。
+
+　　location ~ pattern 　 ~开头表示区分大小写的正则匹配,正则匹配与顺序相关。
+
+　　location ~* pattern 　~*开头表示不区分大小写的正则匹配。
+
+　　location /uri 　　　　不带任何修饰符，也表示前缀匹配，但是在正则匹配之后，普通字符串的匹配与顺序无关，与长短有关。
+
+　　location / 　　　　　 通用匹配，任何未匹配到其它location的请求都会匹配到，相当于switch中的default。
