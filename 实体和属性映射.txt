@@ -1,0 +1,14 @@
+@Component（实体类）
+@ConfigurationProperties（实体类）
+
+
+@Configuration（实体类）
+@ConfigurationProperties（实体类）
+
+
+@EnableConfigurationProperties（启动类）
+@ConfigurationProperties（实体类）
+
+
+@Bean
+@ConfigurationProperties

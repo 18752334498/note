@@ -1,0 +1,29 @@
+An ApplicationStartingEvent is sent at the start of a run but before any processing, except for the registration of listeners and initializers.
+An ApplicationEnvironmentPreparedEvent is sent when the Environment to be used in the context is known but before the context is created.
+An ApplicationPreparedEvent is sent just before the refresh is started but after bean definitions have been loaded.
+An ApplicationStartedEvent is sent after the context has been refreshed but before any application and command-line runners have been called.
+An ApplicationReadyEvent is sent after any application and command-line runners have been called. It indicates that the application is ready to service requests.
+An ApplicationFailedEvent is sent if there is an exception on startup.
+
+
+
+
+
+ApplicationFailedEvent：该事件为spring boot启动失败时的操作
+
+
+ApplicationPreparedEvent：上下文准备事件。
+上下文context已经准备完毕 ，可以通过ApplicationPreparedEvent获取到ConfigurableApplicationContext实例对象。ConfigurableApplicationContext类继承ApplicationContext类，但需要注意这个时候spring容器中的bean还没有被完全的加载，因此如果通过ConfigurableApplicationContext获取bean会报错的。
+
+
+ApplicationReadyEvent：上下文已经准备ok，在refresh之后，相关的回调处理完，表示应用准备好接收请求了。
+ApplicationReadyEvent event
+event.getApplicationContext().getBean(Class.class);
+event.getSpringApplication().addListeners();
+
+
+
+ApplicationStartedEvent：spring boot 启动监听类，在refresh开始前，但在bean定义已被加载后。
+ApplicationStartedEvent event
+event.getSpringApplication().setShowBanner(false);
+event.getSpringApplication().addListeners();
