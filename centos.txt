@@ -124,4 +124,4 @@ export LD_RUN_PATH=$LD_RUN_PATH:/usr/local/apr/lib
 
 ==========================================================================================================
 docker pull zookeeper
-docker run --privileged=true -d --name zookeeper --publish 2181:2181  -d zookeeper:latest
+docker run -i -d --name zk -p 2181:2181  zookeeper:latest
