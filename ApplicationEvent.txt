@@ -4,11 +4,7 @@ An ApplicationPreparedEvent is sent just before the refresh is started but after
 An ApplicationStartedEvent is sent after the context has been refreshed but before any application and command-line runners have been called.
 An ApplicationReadyEvent is sent after any application and command-line runners have been called. It indicates that the application is ready to service requests.
 An ApplicationFailedEvent is sent if there is an exception on startup.
-
-
-
-
-
+===========================================================================
 ApplicationFailedEvent：该事件为spring boot启动失败时的操作
 
 
@@ -22,8 +18,14 @@ event.getApplicationContext().getBean(Class.class);
 event.getSpringApplication().addListeners();
 
 
-
 ApplicationStartedEvent：spring boot 启动监听类，在refresh开始前，但在bean定义已被加载后。
 ApplicationStartedEvent event
 event.getSpringApplication().setShowBanner(false);
 event.getSpringApplication().addListeners();
+
+
+启动监听事件有两种方法：
+1）在main方法的启动类里面：	SpringApplication app = new SpringApplication(SpringBootApp.class);
+							app.addListeners(new NewApplicationListener());
+							app.run(args);
+2）在NewApplicationListener类上面打上注解@Component
