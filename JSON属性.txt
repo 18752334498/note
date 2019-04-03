@@ -1,0 +1,21 @@
+以下是JSON使用的默认属性：
+
+
+WriteMapNullValue
+	将对象转为json字符串，对象属性为null的时候，也要在字符串里展示该字段（address=null）。默认false。
+	
+WriteNullListAsEmpty （用空数组代替空List）
+	List字段如果为null,输出为[],而非null。
+	
+WriteNullStringAsEmpty （用空字符串代替null）
+	字符类型字段如果为null,输出为”“,而非null（address=""）。默认是输出null，可以配合 WriteMapNullValue 使用
+	
+WriteNullNumberAsZero （用0代替空数字）
+	数值字段如果为null,输出为0,而非null
+	
+json格式字符串强转对象，没值以属性的默认值填充
+对象转json字符串，就要用到以上属性，数字类型没值以0填充，
+	
+
+	
+	

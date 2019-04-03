@@ -1,0 +1,5 @@
+ps -ef | grep redis
+ps aux|grep tomcat 			查找tomcat进程
+kill -9 4235				强制终止4325
+netstat -tunlp|grep 8080	查看8080端口被谁占用
+du -sh filename				查看文件夹大小

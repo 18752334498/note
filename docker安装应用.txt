@@ -1,0 +1,39 @@
+docker pull zookeeper
+docker run -i -d --name zk -p 2181:2181 zookeeper:latest
+docker exec zk /bin/bash
+
+下载zookeeper-3.4.13.tar.gz，在windows解压之后有zkServer.cmd和zkCli.cmd，
+如果启动失败，修改zkEnv.cmd里的zoo.cfg文件位置（在conf目录下没有zoo.cfg文件）和java环境，
+先启动zkServer.cmd，再启动zkCli.cmd，这时可以用zkCli.cmd连接docker上的zookeeper（connect IP:port）
+ls
+create /tom "My name is tom" 
+get /tom
+set /tom "I am tom"
+delete /tom
+connect ip:port
+TODO：zookeeper的客户端命令有待学习补充
+
+======================================================================================================
+docker pull mysql:5.6
+docker run -i -d --name mysql -p 3306:3306 -v /docker/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql:5.6
+-e MYSQL_ROOT_PASSWORD="root"：设置root用户密码
+-v /docker/mysql/data:/var/lib/mysql：映射数据目录
+
+======================================================================================================
+docker pull redis
+docker run -i -d --name redis -p 6379:6379 -v /docker/redis/data:/data redis:latest redis-server --appendonly yes
+-v /docker/redis/data:/data		将主机中的目录挂载到容器的/data
+redis-server --appendonly yes	在容器执行redis-server启动命令，并打开redis持久化配置
+
+======================================================================================================
+参考文件：https://github.com/foxiswho/docker-rocketmq
+启动 rocketmq server 容器
+docker run -d -p 9876:9876 --name rmqserver  foxiswho/rocketmq:server
+启动 rocketmq broker 容器
+docker run -d -p 10911:10911 -p 10909:10909 --name rmqbroker --link rmqserver:namesrv -e "NAMESRV_ADDR=namesrv:9876" -e "JAVA_OPTS=-Duser.home=/opt" -e "JAVA_OPT_EXT=-server -Xms128m -Xmx128m -Xmn128m" foxiswho/rocketmq:broker
+启动 rocketmq console 容器
+docker run --name rmqconsole -p 8180:8080 --link rmqserver:namesrv -e "JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false" -t styletang/rocketmq-console-ng
+浏览器访问:http://192.168.42.128:8180
+
+======================================================================================================
+docker run -d -p 5672:5672 -p 15672:15672 --name rabbitmq rabbitmq:management

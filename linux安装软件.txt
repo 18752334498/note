@@ -1,0 +1,42 @@
+linux安装redis
+redis-5.0.0之后已经将redis-trib.rb脚本的功能全部集成到redis-cli，基于redis-cli的--cluster搭建集群
+依赖包安装
+　1 yum install cpp -y  
+　2 yum install binutils -y
+　3 yum install glibc-kernheaders -y
+　4 yum install glibc-common -y
+　5 yum install glibc-devel -y
+　6 yum install gcc -y
+　7 yum install make -y
+这几个步骤可能不需要，因为在安装5.0.4的之前我已按照此步骤安装了4.0.6
+http://download.redis.io/releases/redis-5.0.4.tar.gz
+tar -zxvf redis-5.0.4.tar.gz
+cd /redis-5.0.4
+make (& make install 没试过)
+./redis-server ../redis.conf		#启动redis服务，指定配置文件
+touch 8001 8002 8003 8004 8005 8006
+在六个文件夹下分别创建redis.conf文件，然后分别启动六个服务
+./redis-server /home/redis/cluster/8001/redis.conf
+./redis-server /home/redis/cluster/8002/redis.conf
+./redis-server /home/redis/cluster/8003/redis.conf
+./redis-server /home/redis/cluster/8004/redis.conf
+./redis-server /home/redis/cluster/8005/redis.conf
+./redis-server /home/redis/cluster/8006/redis.conf
+ps -ef | grep redis		#查看进程
+ps aux|grep redis		#查看进程
+用redis-cli创建整个redis集群
+./redis-cli --cluster create 192.168.42.128:8001 192.168.42.128:8002 192.168.42.128:8003 192.168.42.128:8004 192.168.42.128:8005 192.168.42.128:8006		其中一个需要确认，只能输入 yes，不能输入 y
+./redis-cli -c -h {IP} -p {PORT} 				# -c 表示连接集群节点
+./redis-cli -c -h 192.168.42.128 -p 8001		#进入一个节点进行get set
+进入节点后可以查看集群信息：cluster info	查看节点列表：cluster nodes
+用两个窗口分别连接8001和8002，可以法相8001set值可以在8002get到
+./redis-cli --cluster  help
+
+===========================================================================
+===========================================================================
+===========================================================================
+===========================================================================
+===========================================================================
+===========================================================================
+===========================================================================
+===========================================================================
