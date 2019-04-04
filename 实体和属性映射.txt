@@ -1,14 +1,17 @@
-@Component（实体类）
-@ConfigurationProperties（实体类）
+@Component（注入容器）
+@ConfigurationProperties（prefix=""）从属性文件获取值将值并映射到实体类
+public class User{}
 
 
-@Configuration（实体类）
-@ConfigurationProperties（实体类）
+@Configuration（注入容器）
+@ConfigurationProperties（prefix=""）从属性文件获取值并将值映射到实体类
 
 
-@EnableConfigurationProperties（启动类）
-@ConfigurationProperties（实体类）
+@EnableConfigurationProperties（T.class）相当于对某个class进行注册，一般和@Configuration一起使用
+@ConfigurationProperties（prefix=""）从属性文件获取值并将值映射到实体类
 
 
-@Bean
-@ConfigurationProperties
+@Bean（注入容器）
+@ConfigurationProperties（prefix=""）从属性文件获取值并将值映射到实体类
+
+(locations = "classpath:mail.properties")从指定的属性文件读取值
