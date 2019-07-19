@@ -14,7 +14,7 @@ public class ProCityArea {
 
     /**
      * http://www.mca.gov.cn/article/sj/xzqh/2019/
-     * 
+     * notepad，去除左右空格，tab转空格
      * @param args
      * @throws Exception
      */
