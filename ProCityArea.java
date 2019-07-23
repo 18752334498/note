@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 
 public class ProCityArea {
 
+	//http://www.mca.gov.cn/article/sj/xzqh/2019/
     public static void main(String[] args) throws Exception {
         List<Map<String, Object>> list = new ArrayList<>();
         BufferedReader br = new BufferedReader(new FileReader("d:\\省市区.txt"));
