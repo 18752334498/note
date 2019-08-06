@@ -12,6 +12,14 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 public class ProCityArea {
+	
+	/**
+     * 字符流的底层是字节流。 两种的用法也不一样，字符流主要是读取文本文件内容的， 可以一个字符一个字符的读取，也可以一行一行的读取文本内容，
+     * 大多用于处理字符串。而字节流读取的单位为byte，byte是计算机存储最基本单位， 可以用字节流来读取很多其他的格式文件：比如图片、视频等等
+     * 
+     * BufferedReader 包装 FileReader, BufferedWrite 包装 FileWriter
+     * 
+     */
 
     /**
      * <li>http://www.mca.gov.cn/article/sj/xzqh/2019/</li>
